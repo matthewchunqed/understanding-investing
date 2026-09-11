@@ -218,6 +218,7 @@
 <div id="progress-container"><div id="progress-bar"></div></div>
 
 <div class="container" id="reading-content">
+
     <header class="reveal-node">
         <div class="meta-info">
             <span id="reading-time"></span>
@@ -260,6 +261,14 @@
         <p class="reveal-node">This is why diversification can both increase your expected returns and decrease your expected risk. If you expect the market will grow in value every year by 7% on average (due to the risk discount), but that growth is powered entirely by just 4% of its companies, the data shows it is far more profitable to buy the haystack rather than compete to find the needle.</p>
 
         <p class="reveal-node"><b>The most important resource is time in the market.</b> Over time, your bad years will even out against your good years and your actual results will approach your expected results. That means <b>not investing is the most risky choice for meeting retirement needs</b>, whereas <b>stocks is the most risky choice for money you need today</b>.</p>
+
+        <!-- Stock Return Distribution Chart -->
+        <div class="reveal-node" style="margin-top: 2rem; margin-bottom: 2rem;">
+            <canvas id="distributionChart" style="width: 100%; display: block;"></canvas>
+            <p style="font-size: 0.8rem; color: #636e72; text-align: center; margin-top: 0.8rem; line-height: 1.5;">
+                Buying the market portfolio guarantees you the performance of the Average Stock. Under median luck, a stock picker will earn the performance of the Median Stock, while taking on vastly more risk.
+            </p>
+        </div>
     </section>
 
     <section>
@@ -424,7 +433,170 @@
         exitObserver.observe(node);
     });
 
-    window.onload = calculateReadingTime;
+    // Distribution Chart
+    function drawDistributionChart() {
+        const canvas = document.getElementById('distributionChart');
+        if (!canvas) return;
+        const parent = canvas.parentElement;
+        const dpr = window.devicePixelRatio || 1;
+        const w = parent.clientWidth || 660;
+        const h = Math.round(w * 0.55);
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+
+        // Chart area
+        const pad = { top: 30, right: 30, bottom: 55, left: 15 };
+        const cw = w - pad.left - pad.right;
+        const ch = h - pad.top - pad.bottom;
+
+        // Generate right-skewed distribution (log-normal)
+        const bins = 80;
+        const data = new Array(bins).fill(0);
+        const n = 25000;
+        const seed = 42;
+        // Seeded PRNG for consistent chart across reloads
+        let s = seed;
+        function rand() { s = (s * 16807 + 0) % 2147483647; return s / 2147483647; }
+        for (let i = 0; i < n; i++) {
+            const u1 = rand(), u2 = rand();
+            const z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+            const val = Math.exp(0.3 + 0.9 * z) - 1;
+            const bin = Math.floor(((val + 1) / 9) * bins);
+            if (bin >= 0 && bin < bins) data[bin]++;
+        }
+        const maxVal = Math.max(...data);
+
+        const xMin = -100, xMax = 700;
+
+        // Find median (50th percentile) and average/market (69th percentile) bins
+        let cumulative = 0;
+        let medianBin = 0, avgBin = 0;
+        for (let i = 0; i < bins; i++) {
+            cumulative += data[i];
+            if (cumulative <= n * 0.5) medianBin = i;
+            if (cumulative <= n * 0.69) avgBin = i;
+        }
+
+        // Draw bars
+        const barW = cw / bins;
+        for (let i = 0; i < bins; i++) {
+            const barH = (data[i] / maxVal) * ch;
+            const x = pad.left + i * barW;
+            const y = pad.top + ch - barH;
+            ctx.fillStyle = i <= avgBin ? '#c8d8e8' : '#a8d4a0';
+            ctx.fillRect(x, y, barW - 0.5, barH);
+        }
+
+        // Average Stock line (69th percentile / market portfolio)
+        const avgX = pad.left + (avgBin + 0.5) * barW;
+        ctx.strokeStyle = '#4a90e2';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(avgX, pad.top + 22);
+        ctx.lineTo(avgX, pad.top + ch + 5);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Average Stock label — right of line, slightly below Median Stock
+        ctx.fillStyle = '#4a90e2';
+        ctx.font = '600 12px Inter, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('Average Stock', avgX + 6, pad.top + 26);
+
+        // Median Stock line
+        const medianX = pad.left + (medianBin + 0.5) * barW;
+        ctx.strokeStyle = '#e74c3c';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.moveTo(medianX, pad.top + 22);
+        ctx.lineTo(medianX, pad.top + ch + 5);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Median Stock label
+        ctx.fillStyle = '#e74c3c';
+        ctx.font = '600 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Median Stock', medianX, pad.top + 12);
+
+        // Green "Diversification" arrow between the two lines
+        const arrowY = pad.top + ch * 0.25;
+        const arrowLeft = medianX + 4;
+        const arrowRight = avgX - 4;
+        const arrowGap = arrowRight - arrowLeft;
+        const arrowColor = '#333333';
+
+        // Arrow shaft
+        ctx.strokeStyle = arrowColor;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(arrowLeft, arrowY);
+        ctx.lineTo(arrowRight, arrowY);
+        ctx.stroke();
+
+        // Arrowhead pointing right
+        ctx.fillStyle = arrowColor;
+        ctx.beginPath();
+        ctx.moveTo(arrowRight, arrowY);
+        ctx.lineTo(arrowRight - 8, arrowY - 5);
+        ctx.lineTo(arrowRight - 8, arrowY + 5);
+        ctx.closePath();
+        ctx.fill();
+
+        // "Diversification" label — sized to fit between the two lines
+        const maxFontSize = 12;
+        const minFontSize = 6;
+        let fontSize = maxFontSize;
+        ctx.font = '600 ' + fontSize + 'px Inter, sans-serif';
+        while (ctx.measureText('Diversification').width > arrowGap - 6 && fontSize > minFontSize) {
+            fontSize -= 0.5;
+            ctx.font = '600 ' + fontSize + 'px Inter, sans-serif';
+        }
+        ctx.fillStyle = arrowColor;
+        ctx.textAlign = 'center';
+        ctx.fillText('Diversification', (arrowLeft + arrowRight) / 2, arrowY - 8);
+
+        // X-axis
+        ctx.strokeStyle = '#ccc';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, pad.top + ch);
+        ctx.lineTo(pad.left + cw, pad.top + ch);
+        ctx.stroke();
+
+        // X-axis ticks and labels
+        ctx.fillStyle = '#888';
+        ctx.font = '11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        const tickValues = [-100, 0, 100, 200, 300, 400, 500, 600, 700];
+        for (const val of tickValues) {
+            const x = pad.left + ((val - xMin) / (xMax - xMin)) * cw;
+            ctx.beginPath();
+            ctx.moveTo(x, pad.top + ch);
+            ctx.lineTo(x, pad.top + ch + 5);
+            ctx.stroke();
+            ctx.fillText(val + '%', x, pad.top + ch + 20);
+        }
+
+        // X-axis title
+        ctx.fillStyle = '#666';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText('Individual Stock Lifetime Buy-and-Hold Return', pad.left + cw / 2, pad.top + ch + 42);
+
+    }
+
+    window.onload = function() {
+        calculateReadingTime();
+        drawDistributionChart();
+        window.addEventListener('resize', drawDistributionChart);
+    };
 
 </script>
 
