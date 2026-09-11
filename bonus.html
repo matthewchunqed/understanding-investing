@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investing Made Easy &ndash; Bonus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Charter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #fdfdfe; 
+            --text-main: #2d3436;
+            --accent-blue: #4a90e2;
+            --muted-blue: #f4f7fa;
+            --fade-speed: 0.8s;
+        }
+
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { display: none; }
+        html { scrollbar-width: none; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Charter', serif;
+            font-size: 20px;
+            line-height: 1.8;
+            margin: 0;
+        }
+
+        /* Progress Bar */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-blue);
+            transition: width 0.1s ease;
+        }
+
+        .meta-info {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 20px;
+        }
+
+        .container {
+            max-width: 660px;
+            margin: 0 auto;
+            padding: 40vh 24px; 
+        }
+
+        /* --- Reveal Mechanics --- */
+        .reveal-node {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 
+                opacity var(--fade-speed) ease-out, 
+                transform var(--fade-speed) cubic-bezier(0.2, 1, 0.3, 1);
+            margin-bottom: 3.5rem;
+        }
+
+        .reveal-node.in-focus {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, .insight-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 1rem; color: #1a1e21; }
+        h2 { font-size: 1.7rem; margin-top: 4rem; color: #34495e; }
+
+        .insight-block {
+            background: var(--muted-blue);
+            padding: 1.8rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-blue);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .insight-label {
+            display: block;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        img { width: 100%; display: block; }
+
+        .code-block {
+            background: #333333;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', monospace;
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.85rem; line-height: 1.5; }
+        .comparison-table th, .comparison-table td { padding: 12px 14px; border: 1px solid #e0e0e0; text-align: left; vertical-align: top; }
+        .comparison-table th { background: var(--muted-blue); font-family: 'Inter', sans-serif; font-weight: 600; color: #34495e; }
+        .table-heading { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 1.1rem; color: #34495e; margin-top: 3rem; margin-bottom: 0.5rem; }
+
+        .chart-wrapper {
+            margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.05);
+        }
+
+        .image-caption {
+            font-size: 0.85rem;
+            color: #636e72;
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        footer { text-align: center; padding: 20vh 0; opacity: 0.2; font-family: 'Inter'; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+<div id="progress-container"><div id="progress-bar"></div></div>
+
+<div class="container" id="reading-content">
+    <h3><a href="implementation.html" style="text-decoration: none; font-size: 30px;">
+    &#8592; Back to Part 2: Implementation</a></h3>
+    <header class="reveal-node">
+        <div class="meta-info">
+            <span id="reading-time"></span>
+        </div>
+        <h1>Bonus Content</h1>
+        <p style="font-style: italic; color: #636e72;">A deeper dive into the math behind stock prices, additional risk factors, and how to find funds that capture them.</p>
+    </header>
+
+    <section>
+        <!-- Bonus Section 1: Math -->
+        <h2 class="reveal-node">What <i>really</i> decides a stock&rsquo;s price? (Math)</h2>
+
+        <p class="reveal-node">M(t) is market price <i>t</i> years away, E[M(t)] is the average value of market price <i>t</i> years away. &epsilon; is new information about market conditions (undiversifiable risk). Equations Simplified from [6].</p>
+
+        <div class="reveal-node code-block">E[M(1)] = 1.07*M(0); M(1) = 1.07 * M(0) &plusmn; &epsilon;</div>
+
+        <p class="reveal-node">&Delta;M, change in M, is what this article suggests you pursue:</p>
+
+        <div class="reveal-node code-block">E[&Delta;M] = E[M(1)] - M(0) = 0.07*M(0); &Delta;M = M(1) - M(0) = 0.07*M(0) &plusmn; &epsilon;</div>
+
+        <p class="reveal-node">S(t) is a stock&rsquo;s current price <i>t</i> years from now. If you want to pick stocks, you&rsquo;re interested in &Delta;S. Notably, amazing recent profits, quality of the company, or its importance to society don&rsquo;t tell you anything about &Delta;S:</p>
+
+        <div class="reveal-node code-block">S(1) = S(0) + &beta;*[M(1) - M(0)] &plusmn; &#593; =&gt; &Delta;S = &beta;*&Delta;M &plusmn; &#593;</div>
+
+        <p class="reveal-node">&#593; is new information about company who owns S, &beta; is that company&rsquo;s sensitivity to market risk.</p>
+
+        <p class="reveal-node">But &#593;&gt;0 only 31% of the time, and &#593; &gt;&gt;&gt; 0 only 4% of the time, so with median luck &Delta;S &lt; &Delta;M. So with zero effort, a diversified portfolio can consistently beat nearly 70% of stocks, with effectively no risk of going to 0.</p>
+
+        <p class="reveal-node">These equations also demonstrate the two competing strategies for optimized investing.</p>
+
+        <p class="reveal-node">Active investing, aims to maximize alpha (&#593;) by bringing new information to the market not already reflected in prices. Index investing aims to maximize beta (&beta;), using maximum risk exposure while diversifying to optimize results under median-luck.</p>
+
+        <!-- Bonus Section 2: Increasing Risks -->
+        <h2 class="reveal-node">Increasing Risks to Increase Return</h2>
+
+        <p class="reveal-node">In the earlier sections, I only referenced a single type of undiversifiable risk: market risk. The rest of this section will discuss the other types of risk that can be added to a portfolio to increase short-term risk &amp; long term returns beyond that of the market portfolio.</p>
+
+        <p class="reveal-node">Nobel Prize laureates Fama &amp; French made a 3-factor model which explains 90% of the variance of all stock returns. <b>Market Risk (Mkt-Rf), Market Capitalization (SMB),</b> and <b>Book-To-Market Ratio (HML).</b></p>
+
+        <p class="reveal-node">This is a model that seems to be pretty accepted from what I&rsquo;ve seen and the names of the other two factors often describe index funds. SMB is named &ldquo;small cap&rdquo; for higher risk stocks and &ldquo;large cap&rdquo; for lower risk ones, and HML is called &ldquo;value&rdquo; for higher risk stocks and &ldquo;growth&rdquo; for lower risk stocks. In the prior bonus section, we had this equation for the change in value of a stock S: <span class="code-block" style="display: inline; padding: 2px 6px; border-radius: 4px;">&Delta;S = &beta;*&Delta;M &plusmn; &#593;, where &Delta;M = .07 * M(0) &plusmn; &epsilon;</span></p>
+
+        <p class="reveal-node">That ~1.07 is the market discount Mkt-Rf, but other risk exposures like SMB or HML also have risk discounts:</p>
+
+        <div class="reveal-node code-block">&Delta;S &nbsp;= &nbsp;&beta;<sub>Mkt-Rf</sub>*&Delta;Mkt-Rf &nbsp;+ &nbsp;&beta;<sub>SMB</sub>*&Delta;SMB &nbsp;+ &nbsp;&beta;<sub>HML</sub>*&Delta;HML &nbsp;&plusmn; &nbsp;&epsilon; &nbsp;&plusmn; &nbsp;&#593;</div>
+
+        <p class="reveal-node">Just like how some years, the market can perform above expectations, Fama &amp; French posit that in some years small companies and value companies can have exceptional or lackluster years. They observed that often one factor (such as Mkt-Rf) can perform well while others (such as SMB) can perform poorly, suggesting these factors are independent of one another.</p>
+
+        <p class="reveal-node">These fit intuitive definitions of risk because smaller-cap companies are more likely to collapse than the ones that dominate the world, and cheap stocks (relative to their earnings or &ldquo;book value&rdquo;) are riskier because for some reason, investors are pricing them low, which may indicate negative information about them. And it makes sense they would have higher expected returns too, especially since large-cap growths like S&amp;P 500 companies have already seen their large price spikes in order to become large-cap growths.</p>
+
+        <p class="reveal-node">Out of these three, SMB is the most contested one &ndash; it has historically delivered a very small premium that weakened after its discovery and is barely present in several other countries, indicating it may not be an actual risk and rather a soon-to-disappear mispricing. In the hilariously named paper <a href="https://www.sciencedirect.com/science/article/pii/S0304405X18301326"><i>Size Matters, if you control your junk</i></a>, the author details how certain small stocks they call &ldquo;junk&rdquo;, that have low profitability (an upcoming risk factor), weigh down the small company&rsquo;s size discount over history. By removing it, they see a size premium that persists even by slightly tweaking the definition of SMB. This means the premium is <b>robust</b>, which is important to determine if selection bias is the only cause of the premium.</p>
+
+        <p class="reveal-node">Historically, small-cap value stocks have outperformed the total market portfolio over long time spans<sup>[1]</sup>, which implicitly corroborate the main section of this paper: past performance and company excellence do not control expected stock price growth. Instead, the most practical way to get extra returns is by taking more risk.</p>
+
+        <p class="reveal-node">And in fact, value stocks are shown to be much more risky in bad times and only slightly more risky during good times, meaning they always have a higher expected return with a larger spread of possible results.<sup>[2]</sup> In particular, value stocks have shown a premium robust to multiple definitions in international markets and HML has had a 5% higher annual average return in the US than Mkt-Rf, with 3-5% being the standard range for other developed countries.<sup>[3]</sup></p>
+
+        <p class="reveal-node">There are three further notable pricing factors:</p>
+
+        <p class="reveal-node"><b>Profit-to-Revenue Ratio (RMW) &amp; Change-in-Assets to Total Assets Ratio (CMA)</b> which are added to the 3-factor model by Fama &amp; French to make the Fama-French 5 factor model. These two factors increase the R<sup>2</sup> of their model from 0.9 to 0.95, explaining 95% of asset prices and these two make HML approach zero &ndash; meaning they explain value more precisely, rather than indicating another way to profit.</p>
+
+        <p class="reveal-node">RMW means that companies which have high profit margins are riskier because if a company with high profit margins has the same price as one with a low margin, investors are likely pricing in some other risk. CMA means companies which have a low amount of asset growth per year are more likely to collapse during a downturn.</p>
+
+        <p class="reveal-node">Those two are unlikely to have an impact on your investing unless products come out that can target RMW and CMA independently and cheaply instead of targeting HML.</p>
+
+        <p class="reveal-node">At this point, you may have noticed that the risk factors beyond Mkt-Rf (SMB, HML, RMW, and CMA) seem to have no common theme. SMB argues that investing in small companies tend to be riskier (and therefore better returns). While HML argues that investing in companies with cheap price-to-book ratio leads to better returns. But a company being small is generally a <i>disadvantage</i> for business success, while a company&rsquo;s shares being &ldquo;cheap&rdquo; is generally an <i>advantage</i> for business success. And then RMW and CMA appear to be neither good or bad for the company&rsquo;s success.</p>
+
+        <p class="reveal-node">That&rsquo;s because all these factors, and the below factor, are <i>empirical factors</i>. What that means is that the reason we believe these are risks is mostly because of high correlations with historical outperformance. But if you tried, you could pretty easily make a reasonable argument that these are market inefficiencies, not risk factors, and therefore we should not expect them to persist in the future. You could <b>not</b> do this for Mkt-Rf &ndash; because stocks by their definition are risky, but small stocks, cheap stocks, or stocks exposed to any of the above risk factors may not necessarily possess risk that is meaningfully different from risk exposure &ndash; if the data from the past few hundred years turns out to be a statistical anomaly.</p>
+
+        <p class="reveal-node">That leads well into the final factor, which has commanded the highest returns compared to all the prior factors, yet its definition also sounds more like an inefficiency than other factor.</p>
+
+        <p class="reveal-node"><b>Momentum, or Percentile of Recent Growth (MOM)</b> is added to the 3-factor model by Carhart, making the Carhart 4-factor model and is the most controversial of the additional factors. It captures the tendency for stocks which have recently surged to continue to surge in that direction, which can be explained either by investor irrationality or because stocks that continue to surge are at a higher risk during market crashes.</p>
+
+        <p class="reveal-node">If you believe in the arguments, or from the data, that these five factors are five additional risk factors (and not market inefficiencies), then exposing your portfolio to these additional risks <i>should</i> increase your risk exposure and future returns.</p>
+
+        <h2 class="reveal-node" style="font-size: 1.4rem;">How You Can Find Index Funds That Systematically Capture These:</h2>
+
+        <p class="reveal-node">This <a href="https://www.portfoliovisualizer.com/etf-and-mutual-fund-factor-regressions">factor regression tool lists the best funds for each factor</a>. Note not all results are publicly available, some are institutional investing only. Generally those will have a letter at the end of the full name.</p>
+
+        <p class="reveal-node">Here are the best ones I could find:</p>
+
+        <div class="reveal-node">
+            <p><b>US Small-Cap Value</b></p>
+            <p><b>AVUV &ndash; SMB=0.79, HML=0.73, R<sup>2</sup>=97%, Expense Ratio = 0.25% (after 40 years = 9.6%)</b></p>
+            <p><b>VFVA &ndash; SMB=0.44, HML=0.72, R<sup>2</sup>=97%, Expense Ratio = 0.13% (after 40 years = 5.1%)</b></p>
+            <p><b>SVAL &ndash; SMB=0.87, HML=0.76, R<sup>2</sup>=94.5%, Expense Ratio = 0.2% (after 40 years = 7.7%)</b></p>
+        </div>
+
+        <div class="reveal-node">
+            <p><b>International Small Cap Value</b></p>
+            <p><b>AVDV &ndash; SMB=0.06, HML=0.41, R<sup>2</sup>=77.5%, Expense Ratio = 0.36% (after 40 years = 13.5%)</b></p>
+        </div>
+
+        <div class="reveal-node">
+            <p><b>US Momentum</b></p>
+            <p><b>VFMO &ndash; SMB=0.59, HML=0.16, MOM=0.39, R<sup>2</sup>=95.6%, ER = 0.13%, ER after 40y = 5.1%</b></p>
+        </div>
+
+        <div class="reveal-node">
+            <p><b>International Momentum</b></p>
+            <p><b>IMTM &ndash; SMB=-0.23, HML= -0.07, MOM=0.42, R<sup>2</sup>=93.2%, ER = 0.3%, ER after 40y = 11.4%</b></p>
+        </div>
+
+        <p class="reveal-node">Below I will show some diagrams comparing the oldest Small Cap Value fund I could find vs. the oldest S&amp;P Index and oldest Total US market funds I could find. Remember that <b>past returns do not indicate future growth</b>, and it is irrational and anti-theory to base your investments off that.</p>
+
+        <div class="reveal-node chart-wrapper">
+            <img src="image2.png" alt="Past 25-year returns of Small-Cap Value vs. Total US Market vs. S&amp;P 500">
+            <p class="image-caption">Past 25-year returns of Small-Cap Value (Blue) vs. Total US Market (Orange) vs. S&amp;P 500 (Purple).</p>
+        </div>
+
+        <div class="reveal-node chart-wrapper">
+            <img src="image4.png" alt="Past 10-year returns comparison">
+            <p class="image-caption">Past 10-year returns &ndash; Note that US Large Caps have delivered far <i>above expectations</i> over the last decade, and that Small-Cap Value stocks seem to be much riskier in bad times than Large-Cap Growth (S&amp;P 500) or Total Market. On average, we expect large-cap growth to perform lowest and small-cap value highest, but this is an excellent example of variance. And for all premia, we can expect decade-long periods of underperformance relative to one another. <b>If 10-year underperformance of market risk by 50% or more would cause you to sell low, do not invest in small-cap value.</b></p>
+        </div>
+
+        <div class="reveal-node chart-wrapper">
+            <img src="image3.png" alt="1-year performance of Small-Cap Value during COVID-19">
+            <p class="image-caption">1-year performance of Small-Cap Value during COVID-19&rsquo;s unprecedented crisis. If you are prone to selling when your investments sink, and your peers&rsquo; investments grow, you <b>should not</b> invest in SCV because the self-sabotage risk will be far too high.</p>
+        </div>
+
+        <p class="reveal-node">But if you do invest in Small-Cap Value, then you are adding even more <b>diversification to your portfolio</b> because now your entire returns are not driven by market risk. So in times when market risk underperforms, SCV may overperform, or vice versa at the time when you will actually need your money (probably retirement).</p>
+
+        <div class="reveal-node">
+            <p><b style="font-size: 1.3rem;">Factor Returns</b></p>
+            <div class="chart-wrapper">
+                <img src="image1.png" alt="Factor Returns Chart">
+            </div>
+            <p><a href="https://stockviz.github.io/reports02/etf-us/rp-fama-french-factors.html" style="font-size: 1.1rem;">Image Source</a></p>
+        </div>
+
+        <!-- Questions To Ask Yourself -->
+        <h2 class="reveal-node">Questions To Ask Yourself About Your Strategy</h2>
+
+        <div class="reveal-node">
+            <p><b>Here are questions that are good for everyone to ask.</b></p>
+            <ul>
+                <li>How much risk do I need to take to meet my long term goals? How much risk can I take?</li>
+                <li>How much am I losing in fees, compounded between now and until retirement? Can I achieve a similarly sensible expected result paying less in fees?</li>
+                <li>What is a rough estimate of my tax bracket during retirement &ndash; and how do I use that to decide Roth vs. Trad contributions? How much will I lose if I make the wrong choice?</li>
+            </ul>
+        </div>
+
+        <div class="reveal-node">
+            <p><b>If you are not convinced by the arguments made in this paper, and still want to engage in Active Investing (Day Trading/Professional Active Management), ask these questions:</b></p>
+            <ul>
+                <li>Who am I likely buying &amp; selling against? What information do I have that they don&rsquo;t?</li>
+                <li>What information is already reflected in prices? How can I be confident my &ldquo;new&rdquo; information has not already been priced in weeks or months ago?</li>
+                <li>What is my annual return, compared to the risk I am taking? Am I generating &#593; profits in excess of a similarly-risky index fund? <a href="https://www.portfoliovisualizer.com/factor-analysis">Factor-Regression (Alpha Calculation) Tool</a></li>
+                <li>How can I measure whether my outperformance of the market is due to luck or skill?</li>
+                <li>Many of the world&rsquo;s best traders<sup>[Bill Miller, Ken Heebner, Cathie Woods]</sup> delivered terrible returns in the later part of their careers. How can I tell when my or my manager&rsquo;s skill has run out?</li>
+            </ul>
+        </div>
+
+        <div class="reveal-node">
+            <p><b>If you are paying an active manager, also ask yourself this:</b></p>
+            <ul>
+                <li>Portfolio Manager Matt charges 1% each year to take your money and put it in AVUV. Over 40 years, he beats the S&amp;P 500 and the market due to risk exposure even after taking 1/3rd of your retirement money with fees. Is this a good deal? If not, how can you ensure your manager is producing value in excess of what you could do yourself?</li>
+            </ul>
+        </div>
+
+        <!-- References -->
+        <div class="reveal-node" style="margin-top: 4rem;">
+            <h1 style="margin-top: 0;">Bonus Section References</h1>
+
+            <h2><b>Technical:</b></h2>
+            <p>[1] &ndash; <a href="https://www.ivey.uwo.ca/media/3775518/the_cross-section_of_expected_stock_returns.pdf">Cross Section of Expected Stock Returns</a></p>
+            <p>[2] &ndash; <a href="https://www.jstor.org/stable/10.1086/209755?seq=35">Risk and Return of Value Stocks</a></p>
+            <p>[3] &ndash; <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2358">Value vs Growth International Data</a></p>
+            <p><a href="https://www.sciencedirect.com/science/article/pii/S0304405X18301326">Size Matters, if you control your junk</a></p>
+            <p><a href="https://www.bauer.uh.edu/rsusmel/phd/Fama-French_JFE93.pdf">Common Risk Factors in the Return on Stocks and Bonds</a></p>
+            <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2287202">A Five-Factor Asset Pricing Model</a></p>
+
+            <h2><b>Easier-To-Understand:</b></h2>
+            <p><i><u>Videos</u></i></p>
+            <p><a href="https://www.youtube.com/watch?v=jKWbW7Wgm0w">Five-Factor Investing With ETFs</a></p>
+
+            <p><i><u>Webpages</u></i></p>
+            <p><a href="https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model">Fama French 3 &amp; 5-Factor Model</a></p>
+            <p><a href="https://en.wikipedia.org/wiki/Carhart_four-factor_model">Carhart 4-Factor Model</a></p>
+        </div>
+
+    </section>
+
+    <footer class="reveal-node">
+        Written by Matthew Chun | 2026
+    </footer>
+</div>
+
+<script>
+    // 1. Reading Time Logic
+    function calculateReadingTime() {
+        const text = document.getElementById('reading-content').innerText;
+        const wpm = 250;
+        const words = text.trim().split(/\s+/).length;
+        const time = Math.floor(words / wpm);
+        document.getElementById('reading-time').innerText = `${time} MIN READ`;
+    }
+
+    // 2. Progress Bar Logic
+    window.onscroll = function() {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById("progress-bar").style.width = scrolled + "%";
+    };
+
+    // 3. Spotlight Reveal Logic
+    const observerOptions = {
+        root: null,
+        rootMargin: '-5% 0px -25% 0px', 
+        threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-focus');
+            } else {
+                entry.target.classList.remove('in-focus');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-node').forEach(node => {
+        revealObserver.observe(node);
+    });
+
+    window.onload = calculateReadingTime;
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+</body>
+</html>
