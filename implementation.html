@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investing Made Easy</title>
+    <title>Understanding Investing</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Charter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
@@ -132,7 +132,7 @@
         <div class="meta-info">
             <span id="reading-time"></span>
         </div>
-        <h1>Investing Made Easy</h1>
+        <h1>Understanding Investing</h1>
         <p style="font-style: italic; color: #636e72;">Time to apply those ideas to currently available financial products to create a convenient, tax-efficient and highly optimized portfolio that maximizes expected returns.</p>
     </header>
 
@@ -163,8 +163,8 @@
             <p class="table-heading">Generic Contribution Strategy</p>
             <table class="comparison-table">
                 <tr><th>Income Range</th><th>Which to Choose?</th></tr>
-                <tr><td>$0 &ndash; $16,100</td><td>Roth IRA &amp; Roth 401K</td></tr>
-                <tr><td>$16,100 &ndash; $66,500</td><td>If your income will likely increase to $66,500+ within the next 5 years, contribute Roth IRA &amp; Roth 401K. Otherwise, contribute Trad IRA &amp; Trad 401K until you have $500K in Trad.</td></tr>
+                <tr><td>$0 &ndash; $28,500</td><td>Roth IRA &amp; Roth 401K</td></tr>
+                <tr><td>$28,500 &ndash; $66,500</td><td>Roth IRA & Trad 401K</td></tr>
                 <tr><td>$66,500 &ndash; $97,000</td><td>Trad IRA &amp; Trad 401K.</td></tr>
                 <tr><td>All income over $97,000</td><td>Backdoor Roth IRA &amp; Trad 401K</td></tr>
             </table>
@@ -173,7 +173,7 @@
             <table class="comparison-table">
                 <tr><th>First $X withdrawn</th><th>Which to Choose?</th></tr>
                 <tr><td>$0 &ndash; $16,100</td><td>Withdraw first $16,100 as Trad, it is tax free due to standard deduction.</td></tr>
-                <tr><td>$16,100+</td><td>Your choice, but bias towards Roth for large withdrawals.</td></tr>
+                <tr><td>$16,100+</td><td>Keep further Trad withdrawals low to stay in low tax bracket, bias towards Roth for large withdrawals.</td></tr>
             </table>
         </div>
 
@@ -270,18 +270,25 @@
         threshold: 0.1
     };
 
-    const revealObserver = new IntersectionObserver((entries) => {
+    const enterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('in-focus');
-            } else {
+            }
+        });
+    }, { rootMargin: '-5% 0px -15% 0px', threshold: 0.1 });
+
+    const exitObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
                 entry.target.classList.remove('in-focus');
             }
         });
-    }, observerOptions);
+    }, { rootMargin: '10% 0px 5% 0px', threshold: 0 });
 
     document.querySelectorAll('.reveal-node').forEach(node => {
-        revealObserver.observe(node);
+        enterObserver.observe(node);
+        exitObserver.observe(node);
     });
 
     window.onload = calculateReadingTime;

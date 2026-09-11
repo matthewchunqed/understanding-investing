@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investing Made Easy &ndash; Bonus</title>
+    <title>Understanding Investing &ndash; Bonus</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Charter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
@@ -358,18 +358,25 @@
         threshold: 0.1
     };
 
-    const revealObserver = new IntersectionObserver((entries) => {
+    const enterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('in-focus');
-            } else {
+            }
+        });
+    }, { rootMargin: '-5% 0px -15% 0px', threshold: 0.1 });
+
+    const exitObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) {
                 entry.target.classList.remove('in-focus');
             }
         });
-    }, observerOptions);
+    }, { rootMargin: '10% 0px 5% 0px', threshold: 0 });
 
     document.querySelectorAll('.reveal-node').forEach(node => {
-        revealObserver.observe(node);
+        enterObserver.observe(node);
+        exitObserver.observe(node);
     });
 
     window.onload = calculateReadingTime;
