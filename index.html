@@ -278,7 +278,7 @@
 
             <div id="econBox" class="expandable-box" onclick="toggleEconBox(event)">
                 <div class="inner-content">
-                    <h1>Imagine a new tariff is announced which will impact the economy. When will stock prices change?</h1>
+                    <h3>Imagine a new tariff is announced which will impact the economy. When will stock prices change?</h3>
                     <p><b>(A):</b> Stock prices will change immediately after the tariff is announced.</p>
                     <p><b>(B):</b> Stock prices will change when the tariff takes effect, which is when jobs and companies start to be impacted.</p>
                     <p><b>(C):</b> Stock prices will some months or years after the tariff takes effect, once investors have the economic data to know exactly how much tariffs affected their profits.</p>
@@ -347,13 +347,7 @@
 
     // 1. Reading Time Logic
     function calculateReadingTime() {
-        const content = document.getElementById('reading-content').cloneNode(true);
-        content.querySelectorAll('.expandable-box').forEach(el => el.remove());
-        const text = content.innerText;
-        const wpm = 250;
-        const words = text.trim().split(/\s+/).length;
-        const time = Math.floor(words / wpm);
-        document.getElementById('reading-time').innerText = `${time} MIN READ`;
+        document.getElementById('reading-time').innerText = '4 MIN READ';
     }
 
     // 2. Progress Bar Logic

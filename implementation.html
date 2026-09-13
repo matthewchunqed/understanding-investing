@@ -146,11 +146,13 @@
 
         <p class="reveal-node">When a company decides to lower its stock value and give you that lowered value as cash, that is called a dividend. Ensure you <b><u>automatically reinvest dividends</u></b> for all purchased funds, or else they will become uninvested over time. And <b>expense ratios compound, so they must be kept as low as possible.</b> A 1% expense ratio means after 40 years you will only have (99%)<sup>40</sup> = 0.99<sup>40</sup> = 67% of your money, meaning <b>the expense cost you a third of your net worth,</b> while a 0.06% expense ratio will leave you with 0.9994<sup>40</sup> = 97.6% after 40 years.</p>
 
-        <p class="reveal-node">As long as you have taxable income during a year, you can contribute that income to a Roth or Trad IRA and a Roth or Trad 401K for retirement and get a tax advantage. <b>Roth contributions are taxed as income the year you make them, whereas Trad contributions are taxed as income during retirement, so contribute Roth whenever your current income is less than your expected income during retirement and you should contribute Trad when your current income is more than your retirement income</b>. Withdrawing money from your Trad IRA/401K and standard investment accounts <b>does</b> count as income, while Roth withdrawals <b>do not count.</b> <b><u>If your tax bracket is the same during retirement and employment, it does not matter which one you choose because of the commutativity of multiplication.</u></b> That is,</p>
+        <p class="reveal-node">As long as you have taxable income during a year, you can contribute that income to a Roth or Trad IRA and a Roth or Trad 401K for retirement and get a tax advantage. <b>Roth contributions are taxed as income the year you make them, whereas Trad contributions are taxed as income during retirement, so contribute Roth whenever your current income is less than your expected income during retirement and you should contribute Trad when your current income is more than your retirement income</b>. Withdrawing money from your Trad IRA/401K and standard investment accounts <b>does</b> count as income, while Roth withdrawals <b>do not count.</b> <b><u>If your tax bracket is the same during retirement and employment, it does not matter which one you choose because of the commutativity of multiplication.</u></b> Imagine your money doubles between retirement and you have a 20% tax rate now and in retirement. Then, you will have</p>
 
-        <p class="reveal-node"><b>(20% lost from tax) 0.8 * 1.08 * 1.08 * &hellip; * 1.08 (market gains) = 1.08 * 1.08 * 1.08 * &hellip; * 0.8</b></p>
+        <p class="reveal-node"><b>(20% lost from tax) 0.8 * 2 = 2 * 0.8 = 1.6</b></p>
 
-        <p class="reveal-node"><b>For most people, investing has a &ldquo;best strategy&rdquo;</b> <b>Buy VT and contribute to a Roth/Trad IRA &amp; 401K. Do not sell until retirement, especially in response to underperformance. Find an appropriate <a href="https://www.bogleheads.org/wiki/Asset_allocation">psychological risk vs. return tradeoff</a>, choose to contribute Roth vs. Trad based on your current tax bracket, and ensure you reinvest dividends automatically.</b></p>
+        <p class="reveal-node">regardless if you pay your taxes now (Roth) or later (Trad). So if your tax rate now is the same as during retirement, it doesn&rsquo;t matter if you pay taxes now (Roth) or later (Trad).</p>
+
+        <p class="reveal-node"><b>For most people, investing has a winning strategy.</b> <b>Buy VT and contribute to a Roth/Trad IRA &amp; 401K. Do not sell until retirement, especially in response to underperformance. Find an appropriate <a href="https://www.bogleheads.org/wiki/Asset_allocation">psychological risk vs. return tradeoff</a>, choose to contribute Roth vs. Trad based on your current tax bracket, and ensure you reinvest dividends automatically.</b></p>
 
         <!-- Appendix: Roth/Trad Cheat Sheet -->
         <div class="reveal-node" style="margin-top: 4rem;">
@@ -248,11 +250,7 @@
 <script>
     // 1. Reading Time Logic
     function calculateReadingTime() {
-        const text = document.getElementById('reading-content').innerText;
-        const wpm = 250;
-        const words = text.trim().split(/\s+/).length;
-        const time = Math.floor(words / wpm);
-        document.getElementById('reading-time').innerText = `${time} MIN READ`;
+        document.getElementById('reading-time').innerText = '7 MIN READ';
     }
 
     // 2. Progress Bar Logic

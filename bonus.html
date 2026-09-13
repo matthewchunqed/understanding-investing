@@ -336,11 +336,7 @@
 <script>
     // 1. Reading Time Logic
     function calculateReadingTime() {
-        const text = document.getElementById('reading-content').innerText;
-        const wpm = 250;
-        const words = text.trim().split(/\s+/).length;
-        const time = Math.floor(words / wpm);
-        document.getElementById('reading-time').innerText = `${time} MIN READ`;
+        document.getElementById('reading-time').innerText = '8 MIN READ';
     }
 
     // 2. Progress Bar Logic
