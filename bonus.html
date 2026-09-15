@@ -106,6 +106,72 @@
 
         img { width: 100%; display: block; }
 
+        .knowledge-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .caption {
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s, opacity 0.3s;
+        }
+
+        .caption:hover {
+            color: var(--accent-blue);
+        }
+
+        .caption .caret {
+            display: inline-block;
+            margin-left: 6px;
+            transition: transform 0.3s ease;
+            font-size: 0.7rem;
+        }
+
+        .knowledge-container.active > .caption .caret {
+            transform: rotate(180deg);
+        }
+
+        .expandable-box {
+            width: 100%;
+            max-width: 600px;
+            max-height: 1px;
+            background-color: transparent;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            overflow: hidden;
+            cursor: pointer;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        padding 0.5s;
+        }
+
+        .expandable-box.open {
+            max-height: 5000px;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .expandable-box > .inner-content {
+            opacity: 0;
+            text-align: left;
+            transition: opacity 0.3s ease;
+            padding: 0 20px;
+        }
+
+        .expandable-box.open > .inner-content {
+            opacity: 1;
+            transition-delay: 0.3s;
+        }
+
         .code-block {
             background: #333333;
             color: #ffffff;
@@ -157,27 +223,33 @@
 
     <section>
         <!-- Bonus Section 1: Math -->
-        <h2 class="reveal-node">What <i>really</i> decides a stock&rsquo;s price? (Math)</h2>
+        <div class="knowledge-container reveal-node">
+            <p class="caption" onclick="toggleMathBox(event)">What <i>really</i> decides a stock&rsquo;s price? (Math) <span class="caret">&#9662;</span></p>
 
-        <p class="reveal-node">M(t) is market price <i>t</i> years away, E[M(t)] is the average value of market price <i>t</i> years away. &epsilon; is new information about market conditions (undiversifiable risk). Equations Simplified from [6].</p>
+            <div id="mathBox" class="expandable-box" onclick="toggleMathBox(event)">
+                <div class="inner-content">
+                    <p>M(t) is market price <i>t</i> years away, E[M(t)] is the average value of market price <i>t</i> years away. &epsilon; is new information about market conditions (undiversifiable risk). Equations Simplified from [6].</p>
 
-        <div class="reveal-node code-block">E[M(1)] = 1.07*M(0); M(1) = 1.07 * M(0) &plusmn; &epsilon;</div>
+                    <div class="code-block">E[M(1)] = 1.07*M(0); M(1) = 1.07 * M(0) &plusmn; &epsilon;</div>
 
-        <p class="reveal-node">&Delta;M, change in M, is what this article suggests you pursue:</p>
+                    <p>&Delta;M, change in M, is what this article suggests you pursue:</p>
 
-        <div class="reveal-node code-block">E[&Delta;M] = E[M(1)] - M(0) = 0.07*M(0); &Delta;M = M(1) - M(0) = 0.07*M(0) &plusmn; &epsilon;</div>
+                    <div class="code-block">E[&Delta;M] = E[M(1)] - M(0) = 0.07*M(0); &Delta;M = M(1) - M(0) = 0.07*M(0) &plusmn; &epsilon;</div>
 
-        <p class="reveal-node">S(t) is a stock&rsquo;s current price <i>t</i> years from now. If you want to pick stocks, you&rsquo;re interested in &Delta;S. Notably, amazing recent profits, quality of the company, or its importance to society don&rsquo;t tell you anything about &Delta;S:</p>
+                    <p>S(t) is a stock&rsquo;s current price <i>t</i> years from now. If you want to pick stocks, you&rsquo;re interested in &Delta;S. Notably, amazing recent profits, quality of the company, or its importance to society don&rsquo;t tell you anything about &Delta;S:</p>
 
-        <div class="reveal-node code-block">S(1) = S(0) + &beta;*[M(1) - M(0)] &plusmn; &#593; =&gt; &Delta;S = &beta;*&Delta;M &plusmn; &#593;</div>
+                    <div class="code-block">S(1) = S(0) + &beta;*[M(1) - M(0)] &plusmn; &#593; =&gt; &Delta;S = &beta;*&Delta;M &plusmn; &#593;</div>
 
-        <p class="reveal-node">&#593; is new information about company who owns S, &beta; is that company&rsquo;s sensitivity to market risk.</p>
+                    <p>&#593; is new information about company who owns S, &beta; is that company&rsquo;s sensitivity to market risk.</p>
 
-        <p class="reveal-node">But &#593;&gt;0 only 31% of the time, and &#593; &gt;&gt;&gt; 0 only 4% of the time, so with median luck &Delta;S &lt; &Delta;M. So with zero effort, a diversified portfolio can consistently beat nearly 70% of stocks, with effectively no risk of going to 0.</p>
+                    <p>But &#593;&gt;0 only 31% of the time, and &#593; &gt;&gt;&gt; 0 only 4% of the time, so with median luck &Delta;S &lt; &Delta;M. So with zero effort, a diversified portfolio can consistently beat nearly 70% of stocks, with effectively no risk of going to 0.</p>
 
-        <p class="reveal-node">These equations also demonstrate the two competing strategies for optimized investing.</p>
+                    <p>These equations also demonstrate the two competing strategies for optimized investing.</p>
 
-        <p class="reveal-node">Active investing, aims to maximize alpha (&#593;) by bringing new information to the market not already reflected in prices. Index investing aims to maximize beta (&beta;), using maximum risk exposure while diversifying to optimize results under median-luck.</p>
+                    <p>Active investing, aims to maximize alpha (&#593;) by bringing new information to the market not already reflected in prices. Index investing aims to maximize beta (&beta;), using maximum risk exposure while diversifying to optimize results under median-luck.</p>
+                </div>
+            </div>
+        </div>
 
         <!-- Bonus Section 2: Increasing Risks -->
         <h2 class="reveal-node">Increasing Risks to Increase Return</h2>
@@ -198,7 +270,7 @@
 
         <p class="reveal-node">Out of these three, SMB is the most contested one &ndash; it has historically delivered a very small premium that weakened after its discovery and is barely present in several other countries, indicating it may not be an actual risk and rather a soon-to-disappear mispricing. In the hilariously named paper <a href="https://www.sciencedirect.com/science/article/pii/S0304405X18301326"><i>Size Matters, if you control your junk</i></a>, the author details how certain small stocks they call &ldquo;junk&rdquo;, that have low profitability (an upcoming risk factor), weigh down the small company&rsquo;s size discount over history. By removing it, they see a size premium that persists even by slightly tweaking the definition of SMB. This means the premium is <b>robust</b>, which is important to determine if selection bias is the only cause of the premium.</p>
 
-        <p class="reveal-node">Historically, small-cap value stocks have outperformed the total market portfolio over long time spans<sup>[1]</sup>, which implicitly corroborate the main section of this paper: past performance and company excellence do not control expected stock price growth. Instead, the most practical way to get extra returns is by taking more risk.</p>
+        <p class="reveal-node">Historically, small-cap value stocks have outperformed the total market portfolio over long time spans<sup>[1]</sup>, which implicitly corroborates the main section of this paper: past performance and company excellence do not control expected stock price growth. Instead, the most practical way to get extra returns is by taking more risk.</p>
 
         <p class="reveal-node">And in fact, value stocks are shown to be much more risky in bad times and only slightly more risky during good times, meaning they always have a higher expected return with a larger spread of possible results.<sup>[2]</sup> In particular, value stocks have shown a premium robust to multiple definitions in international markets and HML has had a 5% higher annual average return in the US than Mkt-Rf, with 3-5% being the standard range for other developed countries.<sup>[3]</sup></p>
 
@@ -210,11 +282,11 @@
 
         <p class="reveal-node">Those two are unlikely to have an impact on your investing unless products come out that can target RMW and CMA independently and cheaply instead of targeting HML.</p>
 
-        <p class="reveal-node">At this point, you may have noticed that the risk factors beyond Mkt-Rf (SMB, HML, RMW, and CMA) seem to have no common theme. SMB argues that investing in small companies tend to be riskier (and therefore better returns). While HML argues that investing in companies with cheap price-to-book ratio leads to better returns. But a company being small is generally a <i>disadvantage</i> for business success, while a company&rsquo;s shares being &ldquo;cheap&rdquo; is generally an <i>advantage</i> for business success. And then RMW and CMA appear to be neither good or bad for the company&rsquo;s success.</p>
+        <p class="reveal-node">At this point, you may have noticed that the risk factors beyond Mkt-Rf (SMB, HML, RMW, and CMA) seem to have no common theme. SMB argues that investing in small companies tends to be riskier (and therefore better returns). While HML argues that investing in companies with cheap price-to-book ratio leads to better returns. But a company being small is generally a <i>disadvantage</i> for business success, while a company&rsquo;s shares being &ldquo;cheap&rdquo; is generally an <i>advantage</i> for business success. And then RMW and CMA appear to be neither good or bad for the company&rsquo;s success.</p>
 
-        <p class="reveal-node">That&rsquo;s because all these factors, and the below factor, are <i>empirical factors</i>. What that means is that the reason we believe these are risks is mostly because of high correlations with historical outperformance. But if you tried, you could pretty easily make a reasonable argument that these are market inefficiencies, not risk factors, and therefore we should not expect them to persist in the future. You could <b>not</b> do this for Mkt-Rf &ndash; because stocks by their definition are risky, but small stocks, cheap stocks, or stocks exposed to any of the above risk factors may not necessarily possess risk that is meaningfully different from risk exposure &ndash; if the data from the past few hundred years turns out to be a statistical anomaly.</p>
+        <p class="reveal-node">That&rsquo;s because all these factors, and the below factor, are <i>empirical factors</i>. What that means is that the reason we believe these are risks is mostly because of high correlations with historical outperformance. But if you tried, you could pretty easily make a reasonable argument that these are market inefficiencies, not risk factors, and therefore we should not expect them to persist in the future. You could <b>not</b> do this for Mkt-Rf &ndash; because stocks by their definition are risky, but small stocks, cheap stocks, or stocks exposed to any of the above risk factors may not necessarily possess risk that is meaningfully different from market risk exposure &ndash; if the data from the past few hundred years turns out to be a statistical anomaly.</p>
 
-        <p class="reveal-node">That leads well into the final factor, which has commanded the highest returns compared to all the prior factors, yet its definition also sounds more like an inefficiency than other factor.</p>
+        <p class="reveal-node">That leads well into the final factor, which has commanded the highest returns compared to all the prior factors, yet its definition also sounds more like an inefficiency than any other factor.</p>
 
         <p class="reveal-node"><b>Momentum, or Percentile of Recent Growth (MOM)</b> is added to the 3-factor model by Carhart, making the Carhart 4-factor model and is the most controversial of the additional factors. It captures the tendency for stocks which have recently surged to continue to surge in that direction, which can be explained either by investor irrationality or because stocks that continue to surge are at a higher risk during market crashes.</p>
 
@@ -294,7 +366,7 @@
                 <li>What information is already reflected in prices? How can I be confident my &ldquo;new&rdquo; information has not already been priced in weeks or months ago?</li>
                 <li>What is my annual return, compared to the risk I am taking? Am I generating &#593; profits in excess of a similarly-risky index fund? <a href="https://www.portfoliovisualizer.com/factor-analysis">Factor-Regression (Alpha Calculation) Tool</a></li>
                 <li>How can I measure whether my outperformance of the market is due to luck or skill?</li>
-                <li>Many of the world&rsquo;s best traders<sup>[Bill Miller, Ken Heebner, Cathie Woods]</sup> delivered terrible returns in the later part of their careers. How can I tell when my or my manager&rsquo;s skill has run out?</li>
+                <li>Many of the world&rsquo;s best traders<sup>[Bill Miller, Ken Heebner, Cathie Wood]</sup> delivered terrible returns in the later part of their careers. How can I tell when my or my manager&rsquo;s skill has run out?</li>
             </ul>
         </div>
 
@@ -376,6 +448,13 @@
     });
 
     window.onload = calculateReadingTime;
+
+    function toggleMathBox(event) {
+        event.stopPropagation();
+        const box = document.getElementById('mathBox');
+        box.classList.toggle('open');
+        box.closest('.knowledge-container').classList.toggle('active');
+    }
 </script>
 
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
